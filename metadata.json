@@ -1,0 +1,6 @@
+{
+  "name": "GlassChat",
+  "description": "A real-time chat application with a modern glassmorphism design, built with React, Express, and Socket.io.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
