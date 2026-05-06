@@ -1,1 +1,32 @@
+name: CI Checks
 
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm' # Speeds up future runs
+
+      - name: Install dependencies
+        run: npm ci # Use 'npm ci' for clean, consistent installs
+
+      - name: Lint check
+        run: npm run lint
+
+      - name: Type check (TypeScript)
+        run: npx tsc --noEmit
+
+      - name: Run Tests
+        run: npm test
