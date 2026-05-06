@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "tsx server.ts",
     "build": "vite build",
-    "test": "vite test",
-    "test unit": "npm test"
+      "test": "vitest",
+  "test:unit": "vitest run --project=unit", 
+  "test:ui": "vitest --ui"
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit"
