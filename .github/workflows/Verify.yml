@@ -22,6 +22,7 @@ jobs:
 
       - name: Run Linting
         run: npm run lint
-
-     # - name: Run Unit & Integration Tests
-     #   run: npm test -- --run # The --run flag is critical for CI
+        
+        - name: Run Unit & Integration Tests
+      run: npm test -- --run 
+     # The --run flag is critical for CI
