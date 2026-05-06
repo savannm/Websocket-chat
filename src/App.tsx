@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
 import { Send, User, MessageCircle, Hash, Paperclip, X, File as FileIcon, Image as ImageIcon, Music, Users, Edit2, Smile, Check } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import messageSave from "./components/messageSave";
 
 /**
  * Message types definition
@@ -26,13 +27,16 @@ interface Message {
 const REACTIONS = ["👍", "❤️", "😂", "😮", "😢"];
 
 export default function App() {
+
+
+
   // --- State Management ---
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState("");
   const [username, setUsername] = useState("");
   const [isJoined, setIsJoined] = useState(false);
   const [socket, setSocket] = useState<Socket | null>(null);
-  
+
   // Features state
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
   const [pendingAttachment, setPendingAttachment] = useState<Attachment | null>(null);
@@ -50,6 +54,9 @@ export default function App() {
 
   // --- Socket Initialization ---
   useEffect(() => {
+
+
+
     const newSocket = io();
     setSocket(newSocket);
 
@@ -70,12 +77,14 @@ export default function App() {
     });
 
     return () => {
+
       newSocket.disconnect();
     };
   }, []);
 
   // --- Auto-scroll Effect ---
   useEffect(() => {
+
     if (scrollRef.current && !editingMessageId) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
@@ -150,13 +159,15 @@ export default function App() {
     setPendingAttachment(null);
   };
 
+
+
   // Helper to render attachment based on its type
   const renderAttachment = (attachment: Attachment) => {
     if (attachment.type.startsWith("image/")) {
       return (
-        <img 
-          src={attachment.data} 
-          alt={attachment.name} 
+        <img
+          src={attachment.data}
+          alt={attachment.name}
           className="mt-2 max-h-60 rounded-xl object-contain shadow-sm border border-black/5"
         />
       );
@@ -169,8 +180,8 @@ export default function App() {
       );
     } else {
       return (
-        <a 
-          href={attachment.data} 
+        <a
+          href={attachment.data}
           download={attachment.name}
           className="mt-2 flex items-center gap-2 rounded-lg bg-black/5 p-3 transition-colors hover:bg-black/10"
         >
@@ -201,8 +212,8 @@ export default function App() {
           <p className="truncate text-sm font-medium text-slate-700">{pendingAttachment.name}</p>
           <p className="text-xs text-slate-500">Ready to send</p>
         </div>
-        <button 
-          type="button" 
+        <button
+          type="button"
           onClick={clearAttachment}
           className="ml-2 flex h-8 w-8 items-center justify-center rounded-full bg-slate-200 text-slate-500 transition-colors hover:bg-red-100 hover:text-red-500"
         >
@@ -217,7 +228,7 @@ export default function App() {
   if (!isJoined) {
     return (
       <div className="flex min-h-screen items-center justify-center p-4">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-md rounded-3xl border border-white/40 bg-white/30 p-8 shadow-2xl backdrop-blur-xl"
@@ -249,7 +260,7 @@ export default function App() {
               Join Chat
             </button>
           </form>
-          
+
           <div className="mt-6 flex items-center justify-center gap-2 text-xs font-medium text-slate-500">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
@@ -265,7 +276,8 @@ export default function App() {
   return (
     <div className="flex h-screen items-center justify-center p-2 md:p-8">
       <div className="flex h-full w-full max-w-6xl overflow-hidden rounded-[2.5rem] border border-white/40 bg-white/30 shadow-2xl backdrop-blur-2xl">
-        
+
+
         {/* Left Sidebar - Online Users */}
         <aside className="hidden w-64 flex-col border-r border-white/20 bg-white/10 p-4 lg:flex">
           <div className="mb-4 flex items-center gap-2 px-2 text-slate-800">
@@ -274,11 +286,10 @@ export default function App() {
           </div>
           <ul className="flex flex-col gap-1 overflow-y-auto">
             {onlineUsers.map((user, idx) => (
-              <li 
-                key={idx} 
-                className={`flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm transition-colors ${
-                  user === username ? "bg-white/40 font-medium text-indigo-700" : "text-slate-600 hover:bg-white/20"
-                }`}
+              <li
+                key={idx}
+                className={`flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm transition-colors ${user === username ? "bg-white/40 font-medium text-indigo-700" : "text-slate-600 hover:bg-white/20"
+                  }`}
               >
                 <div className="relative">
                   <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-white text-indigo-700 shadow-sm border border-white/50">
@@ -294,7 +305,7 @@ export default function App() {
 
         {/* Chat Area */}
         <div className="flex flex-1 flex-col overflow-hidden relative">
-          
+          <messageSave />
           {/* Header */}
           <header className="flex items-center justify-between border-b border-white/20 bg-white/20 px-6 py-5 backdrop-blur-md">
             <div className="flex items-center gap-3">
@@ -319,7 +330,7 @@ export default function App() {
           </header>
 
           {/* Messages Area */}
-          <div 
+          <div
             ref={scrollRef}
             className="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-6 lg:p-8"
             onClick={() => setReactionPopoverId(null)} // Click anywhere to close popover
@@ -327,7 +338,7 @@ export default function App() {
             <div className="flex flex-col gap-6" onClick={(e) => e.stopPropagation()}>
               <AnimatePresence initial={false}>
                 {messages.map((msg) => {
-                  
+
                   // Render system messages differently
                   if (msg.isSystem) {
                     return (
@@ -340,7 +351,7 @@ export default function App() {
                         <div className="rounded-full bg-white/30 px-4 py-1 md:py-1.5 border border-white/40 text-xs font-medium text-slate-600 shadow-sm backdrop-blur-sm">
                           {msg.text}
                           <span className="ml-2 opacity-50 font-normal">
-                             {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           </span>
                         </div>
                       </motion.div>
@@ -349,7 +360,7 @@ export default function App() {
 
                   const isMe = msg.user === username;
                   const isEditing = editingMessageId === msg.id;
-                  
+
                   return (
                     <motion.div
                       key={msg.id}
@@ -363,22 +374,22 @@ export default function App() {
                             {msg.user}
                           </span>
                         )}
-                        
+
                         <div className={`relative flex items-center gap-2 ${isMe ? 'flex-row-reverse' : 'flex-row'}`}>
-                          
+
                           {/* Message Bubble container */}
                           <div
                             className={`
                               relative rounded-2xl px-4 py-3 shadow-sm transition-all
-                              ${isMe 
-                                ? "rounded-tr-none bg-indigo-600 text-white shadow-md shadow-indigo-100" 
+                              ${isMe
+                                ? "rounded-tr-none bg-indigo-600 text-white shadow-md shadow-indigo-100"
                                 : "rounded-tl-none border border-white/50 bg-white/60 text-slate-800 backdrop-blur-sm"
                               }
                             `}
                           >
                             {isEditing ? (
                               <div className="flex items-center gap-2">
-                                <input 
+                                <input
                                   autoFocus
                                   className="bg-white/20 text-white placeholder-white/60 px-2 py-1 rounded outline-none border-b border-white/40"
                                   value={editMessageText}
@@ -400,20 +411,20 @@ export default function App() {
                                 <p className="text-sm leading-relaxed md:text-base break-words whitespace-pre-wrap">{msg.text}</p>
                               )
                             )}
-                            
+
                             {/* Render Attachment if present */}
                             {!isEditing && msg.attachment && renderAttachment(msg.attachment)}
 
                             {/* Meta Info */}
                             {!isEditing && (
-                              <span 
+                              <span
                                 className={`mt-1 flex items-center gap-1.5 text-[10px] opacity-70 ${isMe ? "justify-end text-indigo-100" : "justify-start text-slate-400"}`}
                               >
                                 {msg.isEdited && <span>(edited)</span>}
                                 {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                               </span>
                             )}
-                            
+
                             {/* Reactions display cluster */}
                             {!isEditing && msg.reactions && Object.keys(msg.reactions).length > 0 && (
                               <div className={`absolute -bottom-3 flex flex-wrap gap-1 ${isMe ? 'right-0 lg:-left-6 lg:right-auto' : 'left-4'}`}>
@@ -421,7 +432,7 @@ export default function App() {
                                   if (users.length === 0) return null;
                                   const iReacted = users.includes(username);
                                   return (
-                                    <button 
+                                    <button
                                       key={reaction}
                                       onClick={() => toggleReaction(msg.id, reaction)}
                                       className={`
@@ -438,18 +449,18 @@ export default function App() {
                             )}
 
                           </div>
-                          
+
                           {/* Hover Actions (Edit & React) */}
                           <div className={`opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 ${isEditing ? 'hidden' : ''}`}>
                             <div className="relative">
-                              <button 
+                              <button
                                 onClick={() => setReactionPopoverId(reactionPopoverId === msg.id ? null : msg.id)}
                                 className="flex h-8 w-8 items-center justify-center rounded-full bg-white/50 text-slate-500 hover:bg-white hover:text-indigo-600 shadow-sm"
                                 title="Add Reaction"
                               >
                                 <Smile size={14} />
                               </button>
-                              
+
                               {/* Reaction Popover */}
                               <AnimatePresence>
                                 {reactionPopoverId === msg.id && (
@@ -472,9 +483,9 @@ export default function App() {
                                 )}
                               </AnimatePresence>
                             </div>
-                            
+
                             {isMe && !isEditing && (
-                              <button 
+                              <button
                                 onClick={() => handleEditMessage(msg.id, msg.text)}
                                 className="flex h-8 w-8 items-center justify-center rounded-full bg-white/50 text-slate-500 hover:bg-white hover:text-amber-600 shadow-sm"
                                 title="Edit my message"
@@ -496,18 +507,18 @@ export default function App() {
           {/* Input Area */}
           <footer className="border-t border-white/20 bg-white/20 p-4 md:p-6 backdrop-blur-md relative" onClick={() => setReactionPopoverId(null)}>
             {renderPendingAttachmentPreview()}
-            
+
             <form onSubmit={handleSendMessage} className="relative flex items-center gap-2 md:gap-4">
               <div className="relative flex flex-1 items-center">
                 {/* Hidden File Input */}
-                <input 
-                  type="file" 
-                  ref={fileInputRef} 
-                  onChange={handleFileSelect} 
-                  className="hidden" 
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileSelect}
+                  className="hidden"
                   accept="image/*,audio/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.txt"
                 />
-                
+
                 {/* Attachment Button */}
                 <button
                   type="button"

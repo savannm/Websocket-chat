@@ -35,11 +35,11 @@ async function startServer() {
     maxHttpBufferSize: 50 * 1024 * 1024
   });
 
-  const PORT = 3000;
+  const PORT = 4000;
 
   // Store messages in memory for this simple template
   const messages: Message[] = [];
-  
+
   // Track online users: map socket.id to username
   const onlineUsers = new Map<string, string>();
 
@@ -69,7 +69,7 @@ async function startServer() {
 
     // Initial Sync: On connection, sync the new client with current message history.
     socket.emit("previous_messages", messages);
-    
+
     // Also send the current list of online users to the newly connected socket directly
     // so they see the list even before they choose a name.
     socket.emit("update_users", Array.from(onlineUsers.values()));
@@ -91,10 +91,10 @@ async function startServer() {
         // Check if an attachment was sent
         attachment: data.attachment
       };
-      
+
       // Store in memory
       messages.push(newMessage);
-      
+
       // Keep memory usage lean - only store last 100 messages
       if (messages.length > 100) messages.shift();
 
@@ -123,7 +123,7 @@ async function startServer() {
         if (!msg.reactions[data.reaction]) {
           msg.reactions[data.reaction] = [];
         }
-        
+
         const usersReactions = msg.reactions[data.reaction];
         // Toggle reaction
         if (usersReactions.includes(data.user)) {
@@ -131,7 +131,7 @@ async function startServer() {
         } else {
           msg.reactions[data.reaction].push(data.user);
         }
-        
+
         io.emit("message_updated", msg);
       }
     });
