@@ -6,9 +6,6 @@
   "scripts": {
     "dev": "tsx server.ts",
     "build": "vite build",
-      "test": "vite test",
-  "test:unit": "vite test run --project=unit", 
-  "test:ui": "vite test --ui"
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit"
