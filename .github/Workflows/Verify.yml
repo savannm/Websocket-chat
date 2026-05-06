@@ -1,4 +1,4 @@
-name: Production Gatekeeper
+name: Gatekeeper
 on:
   push:
     branches: [main]
