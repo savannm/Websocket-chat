@@ -22,8 +22,5 @@ jobs:
 
       - name: Run Linting
         run: npm run lint
-        
-- name: Run All Tests(unit & integration)
-  run: npm test -- --run
-
-        
+      - name: Run All Tests(unit & integration)
+        run: npm test -- --run
