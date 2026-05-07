@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
 import { Send, User, MessageCircle, Hash, Paperclip, X, File as FileIcon, Image as ImageIcon, Music, Users, Edit2, Smile, Check } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import messageSave from "./components/messageSave";
+import MsgSave from "./components/MessageSave";
 
 /**
  * Message types definition
@@ -301,11 +301,11 @@ export default function App() {
               </li>
             ))}
           </ul>
+          <MsgSave />
         </aside>
 
         {/* Chat Area */}
         <div className="flex flex-1 flex-col overflow-hidden relative">
-          <messageSave />
           {/* Header */}
           <header className="flex items-center justify-between border-b border-white/20 bg-white/20 px-6 py-5 backdrop-blur-md">
             <div className="flex items-center gap-3">
